@@ -107,6 +107,11 @@ public sealed partial class BodyAreaTagCondition : IAppearCondition
                 set.UnionWith(new[] { "яйца", "член", "вагина", "анал" });
                 break;
 
+            case "locked-equipment":
+                if (tags.Tags.Contains("ChastityBelt"))
+                    set.UnionWith(new[] { "яйца", "член", "вагина", "анал", "клетка" });
+                break;
+
             case "head":
                 set.UnionWith(new[] { "волосы" });
                 if (tags.Tags.Contains("TopCovered"))
