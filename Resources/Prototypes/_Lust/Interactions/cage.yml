@@ -1,0 +1,240 @@
+# Условие наличия клетки на таргете (переиспользуется во всех интеракциях):
+# - !type:BodyAreaTagCondition
+#     checkTarget: true
+#     checkInitiator: false
+#     categories: [ "клетка" ]
+#     requireExposed: false   <- "клетка" закрыта = клетка надета
+
+# ── Нейтральные (любой → любой с клеткой) ───────────────────────────────────
+
+- type: interaction
+  id: CageTap
+  name: lust-interaction-CageTap
+  icon: ERP1Icon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user постукивает пальцем по клетке на %target"
+  - "%user щёлкает ногтем по металлическим прутьям клетки %target"
+  - "%user легонько бьёт ладонью по клетке %target, вызывая металлический звон"
+  - "%user игриво барабанит пальцами по прутьям клетки %target"
+  loveTarget: 2
+  cooldown: 3
+
+- type: interaction
+  id: CageSqueeze
+  name: lust-interaction-CageSqueeze
+  icon: ERP2Icon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user сжимает прутья клетки %target в кулаке"
+  - "%user крепко хватает клетку %target и слегка тянет"
+  - "%user обхватывает клетку %target ладонью и сдавливает"
+  - "%user проводит пальцами между прутьев клетки %target"
+  loveTarget: 3
+  cooldown: 3
+
+- type: interaction
+  id: CageMock
+  name: lust-interaction-CageMock
+  icon: ERP4Icon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user насмешливо смотрит на клетку %target и ухмыляется"
+  - "%user указывает на клетку %target и тихо смеётся"
+  - "%user демонстративно любуется клеткой на %target"
+  - "%user многозначительно постукивает по клетке %target и покачивает головой"
+  - "%user с довольной улыбкой осматривает клетку %target"
+  loveTarget: 1
+  cooldown: 5
+
+# ── Через рот (инициатор рот открыт) ────────────────────────────────────────
+
+- type: interaction
+  id: CageLick
+  name: lust-interaction-CageLick
+  icon: ERP2Icon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "рот" ]
+    requireExposed: true
+  interactionMessages:
+  - "%user медленно проводит языком по металлическим прутьям клетки %target"
+  - "%user дразняще облизывает клетку %target"
+  - "%user прижимается губами к прутьям клетки %target и проводит по ним языком"
+  - "%user смачно лижет клетку %target, глядя в глаза"
+  loveUser: 2
+  loveTarget: 5
+  cooldown: 3
+
+- type: interaction
+  id: CageKiss
+  name: lust-interaction-CageKiss
+  icon: KissLipsIcon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "рот" ]
+    requireExposed: true
+  interactionMessages:
+  - "%user нежно целует прутья клетки %target"
+  - "%user прижимается губами к клетке %target"
+  - "%user чмокает металл клетки %target"
+  - "%user страстно целует клетку %target, оставляя след помады"
+  loveUser: 2
+  loveTarget: 4
+  cooldown: 3
+
+- type: interaction
+  id: CageBlowAttempt
+  name: lust-interaction-CageBlowAttempt
+  icon: CockBlowjobIcon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:SexCondition
+    checkInitiator: false
+    checkTarget: true
+    requiredSex: [ Male, Futanari ]
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "рот" ]
+    requireExposed: true
+  interactionMessages:
+  - "%user пытается добраться до члена %target через прутья клетки языком"
+  - "%user просовывает язык сквозь прутья клетки %target"
+  - "%user тщетно пытается достать член %target ртом через клетку"
+  - "%user дразняще водит языком вдоль клетки %target, намекая на то, чего не достичь"
+  loveUser: 3
+  loveTarget: 7
+  cooldown: 3
+
+# ── Трение (женский инициатор → мужской таргет с клеткой) ───────────────────
+
+- type: interaction
+  id: CageGrind
+  name: lust-interaction-CageGrind
+  icon: LegsCockFuckIcon
+  category: Cage
+  appearConditions:
+  - !type:HasTargetCondition
+    allowSelfTargeting: false
+  - !type:SexCondition
+    checkInitiator: true
+    checkTarget: false
+    requiredSex: [ Female, Futanari ]
+  - !type:SexCondition
+    checkInitiator: false
+    checkTarget: true
+    requiredSex: [ Male, Futanari ]
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "вагина" ]
+    requireExposed: true
+  - !type:BodyAreaTagCondition
+    checkTarget: true
+    checkInitiator: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user возбужденно трётся вагиной о клетку %target"
+  - "%user прижимается вагиной к клетке %target и медленно двигает бёдрами"
+  - "%user страстно скользит вагиной вдоль металлических прутьев клетки %target"
+  - "%user трётся о клетку %target, тихо постанывая"
+  interactionSounds:
+  - Hlup1
+  - Hlup2
+  loveUser: 6
+  loveTarget: 8
+  cooldown: 3
+
+# ── Самостоятельные (self only) ───────────────────────────────────────────────
+
+- type: interaction
+  id: CageSelfTouch
+  name: lust-interaction-CageSelfTouch
+  icon: ERP3Icon
+  category: Cage
+  appearConditions:
+  - !type:SelfOnlyCondition
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user нервно трогает свою клетку"
+  - "%user машинально проводит рукой по своей клетке"
+  - "%user стискивает прутья своей клетки и тихо вздыхает"
+  - "%user беспомощно дёргает свою клетку"
+  loveUser: 2
+  cooldown: 5
+
+- type: interaction
+  id: CageSelfExamine
+  name: lust-interaction-CageSelfExamine
+  icon: ERP1Icon
+  category: Cage
+  appearConditions:
+  - !type:SelfOnlyCondition
+  - !type:BodyAreaTagCondition
+    checkInitiator: true
+    checkTarget: false
+    categories: [ "клетка" ]
+    requireExposed: false
+  interactionMessages:
+  - "%user внимательно разглядывает свою клетку в поисках слабого места"
+  - "%user осматривает замок на своей клетке с тоскливым видом"
+  - "%user трогает замок клетки и осознаёт, что без ключа никуда"
+  loveUser: 0
+  cooldown: 10

@@ -134,3 +134,13 @@ lust-interaction-ERPtoyPlaceholderFleshflight1 = Вставить член в к
 lust-interaction-ERPSelftoyPlaceholderFleshflight1 = Вставить член в киску
 lust-interaction-ERPSelftoyPlaceholderDildo = Вставить дилдо в анал
 lust-interaction-ERPSelftoyPlaceholderDildo2 = Вставить дилдо в вагину
+
+lust-interaction-CageTap = Постучать по клетке
+lust-interaction-CageSqueeze = Сжать прутья клетки
+lust-interaction-CageMock = Насмехаться над клеткой
+lust-interaction-CageLick = Облизать клетку
+lust-interaction-CageKiss = Поцеловать клетку
+lust-interaction-CageBlowAttempt = Попытаться добраться ртом
+lust-interaction-CageGrind = Потереться о клетку
+lust-interaction-CageSelfTouch = Потрогать свою клетку
+lust-interaction-CageSelfExamine = Осмотреть свою клетку

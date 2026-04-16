@@ -6,6 +6,7 @@ using Content.Shared._Sunrise.Aphrodisiac;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Components;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Prototypes;
 using Content.Shared._Sunrise.InteractionsPanel.Data.UI;
+using Content.Shared._Sunrise.LockableEquipment;
 using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Clothing;
@@ -48,6 +49,7 @@ public partial class InteractionsPanel
         SubscribeLocalEvent<InteractionsComponent, ClothingDidUnequippedEvent>(ClothingDidUnequipped);
         SubscribeLocalEvent<InteractionsComponent, DidEquipHandEvent>(DidEquipped);
         SubscribeLocalEvent<InteractionsComponent, DidUnequipHandEvent>(DidUnequipped);
+        SubscribeLocalEvent<InteractionsComponent, EquipmentContainerChangedEvent>(OnEquipmentContainerChanged);
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.Interact, new PointerInputCmdHandler(HandleInteract))
@@ -141,6 +143,11 @@ public partial class InteractionsPanel
     }
 
     private void ClothingDidUnequipped(EntityUid uid, InteractionsComponent component, ClothingDidUnequippedEvent args)
+    {
+        UpdateUIForClothingChange(uid);
+    }
+
+    private void OnEquipmentContainerChanged(EntityUid uid, InteractionsComponent component, EquipmentContainerChangedEvent args)
     {
         UpdateUIForClothingChange(uid);
     }
