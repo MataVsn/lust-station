@@ -8,13 +8,14 @@ namespace Content.Shared._Lust.LockableEquipment;
 /// <summary>
 /// Stores the internal container used for installed lockable devices.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
+[Access(typeof(EquipmentContainerSystem))]
 public sealed partial class EquipmentContainerComponent : Component
 {
     /// <summary>
     /// Container identifier holding the currently installed device.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string ContainerId = "locked-equipment";
 
     /// <summary>

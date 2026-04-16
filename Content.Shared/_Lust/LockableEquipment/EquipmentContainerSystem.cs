@@ -87,7 +87,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
         if (!args.CanInteract || !args.CanAccess)
             return;
 
-        if (!TryGetEquipment(ent.Owner, ent.Comp, out var device))
+        if (TryGetEquipment(ent.Owner, ent.Comp) is not {} device)
             return;
 
         if (!TryComp(device, out LockableEquipmentComponent? comp))
@@ -401,18 +401,12 @@ public sealed class EquipmentContainerSystem : EntitySystem
         return null;
     }
 
-    private bool TryGetEquipment(EntityUid uid, EquipmentContainerComponent comp, out EntityUid device)
+    private EntityUid? TryGetEquipment(EntityUid uid, EquipmentContainerComponent comp)
     {
-        device = EntityUid.Invalid;
-
         if (!_container.TryGetContainer(uid, comp.ContainerId, out var container))
-            return false;
+            return null;
 
-        if (FindDevice(container) is not { } found)
-            return false;
-
-        device = found;
-        return true;
+        return FindDevice(container);
     }
 
     private bool CanAccess(EntityUid owner, string layer, LockableEquipmentComponent device)
@@ -422,7 +416,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
     private bool TryUseHeldKey(Entity<EquipmentContainerComponent> ent, EntityUid user)
     {
-        if (!TryGetEquipment(ent.Owner, ent.Comp, out var device))
+        if (TryGetEquipment(ent.Owner, ent.Comp) is not {} device)
             return false;
 
         foreach (var hand in _hands.EnumerateHands(user))
@@ -441,7 +435,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
     private bool TryBreakWithHeldTool(Entity<EquipmentContainerComponent> ent, EntityUid user)
     {
-        if (!TryGetEquipment(ent.Owner, ent.Comp, out var device))
+        if (TryGetEquipment(ent.Owner, ent.Comp) is not {} device)
             return false;
 
         if (!TryComp(device, out LockableEquipmentComponent? comp))

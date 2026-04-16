@@ -27,16 +27,19 @@ public sealed class LockableEquipmentSystem : EntitySystem
 
     public override void Initialize()
     {
-        _xformQuery = GetEntityQuery<TransformComponent>();
-
-        SubscribeLocalEvent<LockableEquipmentComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<LockableEquipmentComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<LockableEquipmentComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<LockableEquipmentComponent, LockableEquipmentBreakDoAfterEvent>(OnBreakDoAfter);
+
+        _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
     private void OnStartup(Entity<LockableEquipmentComponent> ent, ref ComponentStartup args)
     {
-        UpdateIconState(ent);
+        if (ent.Comp.RepairMaterial == null && ent.Comp.RepairAmount > 0)
+            Log.Warning($"{ToPrettyString(ent)} has RepairAmount={ent.Comp.RepairAmount} but no RepairMaterial — repair will never trigger.");
+
+        RefreshIconState(ent);
     }
 
     private void OnInteractUsing(Entity<LockableEquipmentComponent> ent, ref InteractUsingEvent args)
@@ -121,7 +124,7 @@ public sealed class LockableEquipmentSystem : EntitySystem
 
         _popup.PopupClient(msg, user, user);
 
-        UpdateIconState((device, lockComp));
+        RefreshIconState((device, lockComp));
         Dirty(device, lockComp);
         return true;
     }
@@ -256,7 +259,7 @@ public sealed class LockableEquipmentSystem : EntitySystem
                 return true;
         }
 
-        UpdateIconState((device, comp));
+        RefreshIconState((device, comp));
         Dirty(device, comp);
         return true;
     }
@@ -290,7 +293,7 @@ public sealed class LockableEquipmentSystem : EntitySystem
             Loc.GetString("lockable-equipment-repaired", ("name", name)),
             user);
 
-        UpdateIconState((device, comp));
+        RefreshIconState((device, comp));
         Dirty(device, comp);
         return true;
     }
@@ -346,7 +349,7 @@ public sealed class LockableEquipmentSystem : EntitySystem
         return false;
     }
 
-    private void UpdateIconState(Entity<LockableEquipmentComponent> ent)
+    public void RefreshIconState(Entity<LockableEquipmentComponent> ent)
     {
         if (!TryComp(ent.Owner, out AppearanceComponent? appearance))
             return;

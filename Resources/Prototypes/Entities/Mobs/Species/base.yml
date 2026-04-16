@@ -255,6 +255,7 @@
   - type: CanJump
     isOnlyEmotion: false
   - type: CanFall
+  - type: EquipmentContainer
   # Sunrise-End
 
 - type: entity
