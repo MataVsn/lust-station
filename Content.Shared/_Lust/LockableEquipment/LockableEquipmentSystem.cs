@@ -1,4 +1,4 @@
-using Content.Shared._Sunrise.LockableEquipment;
+using Content.Shared._Lust.LockableEquipment;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -8,7 +8,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 public sealed class LockableEquipmentSystem : EntitySystem
 {

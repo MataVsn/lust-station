@@ -1,6 +1,6 @@
 using Robust.Shared.GameObjects;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 /// <summary>
 /// Executes the lock/unlock action using a suitable held key.

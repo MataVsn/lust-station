@@ -1,7 +1,7 @@
 using System;
 using Robust.Shared.Serialization;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 [Serializable, NetSerializable]
 public sealed class EquipmentVisualData(bool visible, string? layer, string? rsiPath, string? state) : ICloneable

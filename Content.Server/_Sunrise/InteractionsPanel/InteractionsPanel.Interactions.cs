@@ -6,7 +6,7 @@ using Content.Shared._Sunrise.Aphrodisiac;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Components;
 using Content.Shared._Sunrise.InteractionsPanel.Data.Prototypes;
 using Content.Shared._Sunrise.InteractionsPanel.Data.UI;
-using Content.Shared._Sunrise.LockableEquipment;
+using Content.Shared._Lust.LockableEquipment;
 using Content.Shared.Chat;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Clothing;

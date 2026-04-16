@@ -25,7 +25,7 @@
   description: A test lockable device that breaks and is repaired with steel.
   components:
   - type: Sprite
-    sprite: _Sunrise/Clothing/Locked/cage.rsi
+    sprite: _Lust/Clothing/Locked/cage.rsi
     state: icon
 
 - type: entity
@@ -35,7 +35,7 @@
   description: A test lockable device that breaks and is repaired with glass.
   components:
   - type: Sprite
-    sprite: _Sunrise/Clothing/Locked/cage.rsi
+    sprite: _Lust/Clothing/Locked/cage.rsi
     state: icon
   - type: LockableEquipment
     repairMaterial: Glass
@@ -48,7 +48,7 @@
   description: A test lockable device that can be forced open without breaking.
   components:
   - type: Sprite
-    sprite: _Sunrise/Clothing/Locked/cage.rsi
+    sprite: _Lust/Clothing/Locked/cage.rsi
     state: icon
   - type: LockableEquipment
     mode: ForceOpen
@@ -60,7 +60,7 @@
   description: A test lockable device that is destroyed when forced.
   components:
   - type: Sprite
-    sprite: _Sunrise/Clothing/Locked/cage.rsi
+    sprite: _Lust/Clothing/Locked/cage.rsi
     state: icon
   - type: LockableEquipment
     mode: Destroyable

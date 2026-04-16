@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.Inventory;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 /// <summary>
 /// Checks whether a lockable layer can be interacted with on the current wearer.

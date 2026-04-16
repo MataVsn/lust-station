@@ -3,7 +3,7 @@ using Content.Shared.Stacks;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 /// <summary>
 /// Stores lock, break and visual configuration for a lockable device.

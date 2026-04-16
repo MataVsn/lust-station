@@ -10,7 +10,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 /// <summary>
 /// Handles installing and removing lockable devices from an entity-owned container.

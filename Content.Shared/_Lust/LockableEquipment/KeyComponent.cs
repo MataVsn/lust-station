@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class KeyComponent : Component
