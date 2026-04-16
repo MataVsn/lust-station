@@ -1,3 +1,4 @@
+using Content.Shared._Sunrise.LockableEquipment;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
@@ -10,7 +11,23 @@ public sealed class SexEquipRestrictionSystem : EntitySystem
 
     public override void Initialize()
     {
+        // EquipmentContainer path: raised on the device before it is installed into a container.
+        SubscribeLocalEvent<SexEquipRestrictionComponent, EquipmentContainerAttachAttemptEvent>(OnAttachAttempt);
+
+        // Clothing path: raised on the item when it is being equipped to an inventory slot.
         SubscribeLocalEvent<SexEquipRestrictionComponent, BeingEquippedAttemptEvent>(OnBeingEquipped);
+    }
+
+    private void OnAttachAttempt(Entity<SexEquipRestrictionComponent> ent, ref EquipmentContainerAttachAttemptEvent args)
+    {
+        if (!TryComp<HumanoidAppearanceComponent>(args.Target, out var humanoid))
+            return;
+
+        if (ent.Comp.AllowedSex.Contains(humanoid.Sex))
+            return;
+
+        args.Cancel();
+        args.Reason = "sex-equip-restriction-blocked";
     }
 
     private void OnBeingEquipped(Entity<SexEquipRestrictionComponent> ent, ref BeingEquippedAttemptEvent args)

@@ -322,6 +322,17 @@ public sealed class EquipmentContainerSystem : EntitySystem
             return false;
         }
 
+        // Lust-Edit-Start
+        var attempt = new EquipmentContainerAttachAttemptEvent(ent.Owner, user);
+        RaiseLocalEvent(deviceUid, attempt);
+        if (attempt.Cancelled)
+        {
+            if (attempt.Reason != null)
+                _popup.PopupClient(Loc.GetString(attempt.Reason), user);
+            return false;
+        }
+        // Lust-Edit-End
+
         EnsureComp<DoAfterComponent>(user);
 
         var doAfter = new DoAfterArgs(

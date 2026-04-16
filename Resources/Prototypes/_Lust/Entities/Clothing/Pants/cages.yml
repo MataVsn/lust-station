@@ -1,0 +1,131 @@
+
+- type: entity
+  id: BaseLustCage
+  abstract: true
+  parent: BaseLockableEquipment
+  components:
+  - type: Tag
+    tags:
+    - ChastityBelt
+
+# Male cages (Male, Futanari)
+- type: entity
+  id: CageMaleNormal
+  parent: BaseLustCage
+  name: chastity cage
+  description: A simple chastity cage. Locks with a paired key.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_normal.rsi
+    state: icon
+  - type: LockableEquipment
+    rsiPath: _Lust/Clothing/Cages/cage_normal.rsi
+    spriteState: equipped-PANTS
+  - type: SexEquipRestriction
+    allowedSex:
+    - Male
+    - Futanari
+  - type: Tag
+    tags:
+    - ChastityBelt
+    - ChastityMale
+
+- type: entity
+  id: CageMaleIron
+  parent: BaseLustCage
+  name: iron chastity cage
+  description: A heavy iron chastity cage. Harder to break open.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_iron.rsi
+    state: icon
+  - type: LockableEquipment
+    rsiPath: _Lust/Clothing/Cages/cage_iron.rsi
+    spriteState: equipped-PANTS
+    breakDoAfter: 4.0
+    repairAmount: 2
+  - type: SexEquipRestriction
+    allowedSex:
+    - Male
+    - Futanari
+  - type: Tag
+    tags:
+    - ChastityBelt
+    - ChastityMale
+
+- type: entity
+  id: CageMaleFlat
+  parent: BaseLustCage
+  name: flat chastity cage
+  description: A flat profile chastity cage, harder to notice under clothes.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_flat.rsi
+    state: icon
+  - type: LockableEquipment
+    rsiPath: _Lust/Clothing/Cages/cage_flat.rsi
+    spriteState: equipped-PANTS
+  - type: SexEquipRestriction
+    allowedSex:
+    - Male
+    - Futanari
+  - type: Tag
+    tags:
+    - ChastityBelt
+    - ChastityMale
+
+# Female cage (Female, Futanari)
+- type: entity
+  id: CageFemaleBelt
+  parent: BaseLustCage
+  name: chastity belt
+  description: A chastity belt. Locks with a paired key.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_female.rsi
+    state: icon
+  - type: LockableEquipment
+    rsiPath: _Lust/Clothing/Cages/cage_female.rsi
+    spriteState: equipped-PANTS
+  - type: SexEquipRestriction
+    allowedSex:
+    - Female
+    - Futanari
+  - type: Tag
+    tags:
+    - ChastityBelt
+    - ChastityFemale
+
+#  Electric cage (Make, Futunari)
+- type: entity
+  id: CageMaleElectric
+  parent: BaseLustCage
+  name: electric chastity cage
+  description: A chastity cage with an electric shock module. Currently inactive.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_electric.rsi
+    state: icon
+  - type: LockableEquipment
+    rsiPath: _Lust/Clothing/Cages/cage_electric.rsi
+    spriteState: equipped-PANTS
+  - type: SexEquipRestriction
+    allowedSex:
+    - Male
+    - Futanari
+  - type: Tag
+    tags:
+    - ChastityBelt
+    - ChastityMale
+
+#  Key
+
+- type: entity
+  id: CageLustKey
+  parent: BaseKey
+  name: chastity key
+  description: A small key. Pairs with a chastity device to lock or unlock it.
+  components:
+  - type: Sprite
+    sprite: _Lust/Clothing/Cages/cage_key.rsi
+    state: icon
