@@ -95,11 +95,13 @@
       - map: ["enum.HumanoidVisualLayers.LFoot"]
       - map: ["enum.HumanoidVisualLayers.RFoot"]
       # Sunrise-start
+      - map: ["lockable_under"] # Sunrise-edit
       - map: ["bra"]
       - map: ["pants"]
       - map: ["socks"]
       - map: ["plug"]
       - map: ["jumpsuit"]
+      - map: ["lockable_normal"] # Sunrise-edit
       # Sunrise-end
       - map: ["enum.HumanoidVisualLayers.LHand"]
       - map: ["enum.HumanoidVisualLayers.RHand"]
@@ -117,6 +119,7 @@
       - map: [ "ears" ]
       - map: [ "eyes" ]
       - map: [ "enum.HumanoidVisualLayers.HeadTop" ]
+      - map: ["lockable_over"] # Sunrise-edit
       - map: [ "mask" ]
       - map: [ "head" ]
       - map: [ "pocket1" ]
