@@ -1,12 +1,133 @@
+using Content.Shared.Tag;
 using Robust.Shared.Containers;
 using Robust.Shared.Serialization;
-using Content.Shared.Tag;
 
 namespace Content.Shared._Sunrise.InteractionsPanel.Data.Conditions;
 
 [Serializable, NetSerializable, DataDefinition]
 public sealed partial class BodyAreaTagCondition : IAppearCondition
 {
+    private static readonly string[] CoveredTorso =
+    {
+        "грудь",
+        "ляжки",
+        "попа",
+        "шея",
+        "член",
+        "вагина",
+        "анал"
+    };
+
+    private static readonly string[] CoveredLowerBody =
+    {
+        "член",
+        "вагина",
+        "анал"
+    };
+
+    private static readonly string[] CoveredHead =
+    {
+        "волосы"
+    };
+
+    private static readonly string[] CoveredHeadTop =
+    {
+        "уши",
+        "волосы"
+    };
+
+    private static readonly string[] CoveredFullFace =
+    {
+        "уши",
+        "волосы",
+        "рот",
+        "лицо",
+        "губы",
+        "щёки"
+    };
+
+    private static readonly string[] CoveredGloves =
+    {
+        "ладони",
+        "гладкие перчатки"
+    };
+
+    private static readonly string[] CoveredNeck =
+    {
+        "шея"
+    };
+
+    private static readonly string[] CoveredMask =
+    {
+        "рот"
+    };
+
+    private static readonly string[] CoveredFace =
+    {
+        "рот",
+        "щёки",
+        "лицо"
+    };
+
+    private static readonly string[] CoveredBra =
+    {
+        "грудь"
+    };
+
+    private static readonly string[] CoveredSocks =
+    {
+        "ступни"
+    };
+
+    private static readonly string[] CoveredShoes =
+    {
+        "носки",
+        "ступни"
+    };
+
+    private static readonly string[] CoveredFullBody =
+    {
+        "щёки",
+        "губы",
+        "шея",
+        "уши",
+        "волосы",
+        "рот",
+        "грудь",
+        "ступни",
+        "ляжки",
+        "попа",
+        "член",
+        "вагина",
+        "анал",
+        "лицо",
+        "хвост",
+        "ладони",
+        "гладкие перчатки"
+    };
+
+    private static readonly string[] CoveredOuterFullBody =
+    {
+        "грудь",
+        "ступни",
+        "ляжки",
+        "попа",
+        "член",
+        "вагина",
+        "анал",
+        "шея",
+        "ладони",
+        "гладкие перчатки"
+    };
+
+    private static readonly string[] CoveredChastity =
+    {
+        "член",
+        "вагина",
+        "анал",
+        "клетка"
+    };
+
     [DataField]
     public bool CheckInitiator { get; private set; }
 
@@ -59,9 +180,11 @@ public sealed partial class BodyAreaTagCondition : IAppearCondition
             if (container.ContainedEntities.Count == 0)
                 continue;
 
-            var ent = container.ContainedEntities[0];
-            entMan.TryGetComponent<TagComponent>(ent, out var tags);
-            result.UnionWith(GetCategoriesBySlotAndTags(slot, tags));
+            foreach (var ent in container.ContainedEntities)
+            {
+                entMan.TryGetComponent<TagComponent>(ent, out var tags);
+                result.UnionWith(GetCategoriesBySlotAndTags(slot, tags));
+            }
         }
 
         return result;
@@ -75,82 +198,105 @@ public sealed partial class BodyAreaTagCondition : IAppearCondition
         switch (slot)
         {
             case "jumpsuit":
-                set.UnionWith(new[] { "РіСЂСѓРґСЊ", "Р»СЏР¶РєРё", "РїРѕРїР°", "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»" });
+                set.UnionWith(CoveredTorso);
+
                 if (tagSet?.Contains("NudeBottom") == true)
-                    set = new() { "РіСЂСѓРґСЊ" };
+                    return new HashSet<string> { "грудь" };
+
                 if (tagSet?.Contains("NudeTop") == true)
-                    set = new() { "Р»СЏР¶РєРё", "РїРѕРїР°", "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»" };
+                    return new HashSet<string> { "ляжки", "попа", "шея", "член", "вагина", "анал" };
+
                 if (tagSet?.Contains("CommandSuit") == true)
-                    set = new() { "РіСЂСѓРґСЊ", "Р»СЏР¶РєРё", "РїРѕРїР°", "РІР°РіРёРЅР°", "Р°РЅР°Р»" };
+                    return new HashSet<string> { "грудь", "ляжки", "попа", "член", "вагина", "анал" };
+
                 break;
 
             case "outerClothing":
-                set.UnionWith(new[] { "РіСЂСѓРґСЊ", "Р»СЏР¶РєРё", "РїРѕРїР°", "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»" });
+                set.UnionWith(CoveredTorso);
+
                 if (tagSet?.Contains("NudeBottom") == true)
-                    set = new() { "РіСЂСѓРґСЊ" };
+                    return new HashSet<string> { "грудь" };
+
                 if (tagSet?.Contains("NudeFull") == true)
-                    set.Clear();
+                    return set.ClearAndReturn();
+
                 if (tagSet?.Contains("FullCovered") == true)
-                    set = new() {
-                        "С‰С‘РєРё", "РіСѓР±С‹", "С€РµСЏ", "СѓС€Рё", "РІРѕР»РѕСЃС‹", "СЂРѕС‚", "РіСЂСѓРґСЊ", "СЃС‚СѓРїРЅРё", "Р»СЏР¶РєРё", "РїРѕРїР°",
-                        "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»", "Р»РёС†Рѕ", "С…РІРѕСЃС‚", "Р»Р°РґРѕРЅРё", "РіР»Р°РґРєРёРµ РїРµСЂС‡Р°С‚РєРё"
-                    };
+                    return new HashSet<string>(CoveredFullBody);
+
                 if (tagSet?.Contains("FullBodyOuter") == true)
-                    set = new() {
-                        "РіСЂСѓРґСЊ", "СЃС‚СѓРїРЅРё", "Р»СЏР¶РєРё", "РїРѕРїР°", "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»", "С€РµСЏ", "Р»Р°РґРѕРЅРё", "РіР»Р°РґРєРёРµ РїРµСЂС‡Р°С‚РєРё"
-                    };
+                    return new HashSet<string>(CoveredOuterFullBody);
+
                 break;
 
             case "pants":
-                set.UnionWith(new[] { "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»" });
+                set.UnionWith(CoveredLowerBody);
                 break;
 
             case "locked-equipment":
                 if (tagSet?.Contains("ChastityBelt") == true)
-                    set.UnionWith(new[] { "СЏР№С†Р°", "С‡Р»РµРЅ", "РІР°РіРёРЅР°", "Р°РЅР°Р»", "РєР»РµС‚РєР°" });
+                    set.UnionWith(CoveredChastity);
                 break;
 
             case "head":
-                set.UnionWith(new[] { "РІРѕР»РѕСЃС‹" });
+                set.UnionWith(CoveredHead);
+
                 if (tagSet?.Contains("TopCovered") == true)
-                    set = new() { "СѓС€Рё", "РІРѕР»РѕСЃС‹" };
+                    return new HashSet<string>(CoveredHeadTop);
+
                 if (tagSet?.Contains("FullCovered") == true)
-                    set = new() { "СѓС€Рё", "РІРѕР»РѕСЃС‹", "СЂРѕС‚", "Р»РёС†Рѕ", "РіСѓР±С‹", "С‰С‘РєРё" };
+                    return new HashSet<string>(CoveredFullFace);
+
                 break;
 
             case "gloves":
-                set.UnionWith(new[] { "Р»Р°РґРѕРЅРё", "РіР»Р°РґРєРёРµ РїРµСЂС‡Р°С‚РєРё" });
+                set.UnionWith(CoveredGloves);
+
                 if (tagSet?.Contains("SmoothGloves") == true)
-                    set = new() { "Р»Р°РґРѕРЅРё" };
+                    return new HashSet<string> { "ладони" };
+
                 if (tagSet?.Contains("Ring") == true)
-                    set.Clear();
+                    return set.ClearAndReturn();
+
                 break;
 
             case "neck":
-                set.UnionWith(new[] { "С€РµСЏ" });
+                set.UnionWith(CoveredNeck);
+
                 if (tagSet?.Contains("OpenNeck") == true)
-                    set.Clear();
+                    return set.ClearAndReturn();
+
                 break;
 
             case "mask":
-                set.UnionWith(new[] { "СЂРѕС‚" });
+                set.UnionWith(CoveredMask);
+
                 if (tagSet?.Contains("FaceCovered") == true)
-                    set = new() { "СЂРѕС‚", "С‰С‘РєРё", "Р»РёС†Рѕ" };
+                    return new HashSet<string>(CoveredFace);
+
                 break;
 
             case "bra":
-                set.UnionWith(new[] { "РіСЂСѓРґСЊ" });
+                set.UnionWith(CoveredBra);
                 break;
 
             case "socks":
-                set.UnionWith(new[] { "СЃС‚СѓРїРЅРё" });
+                set.UnionWith(CoveredSocks);
                 break;
 
             case "shoes":
-                set.UnionWith(new[] { "РЅРѕСЃРєРё", "СЃС‚СѓРїРЅРё" });
+                set.UnionWith(CoveredShoes);
                 break;
         }
 
+        return set;
+    }
+}
+
+internal static class BodyAreaTagConditionExtensions
+{
+    public static HashSet<string> ClearAndReturn(this HashSet<string> set)
+    {
+        set.Clear();
         return set;
     }
 }

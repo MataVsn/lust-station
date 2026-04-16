@@ -1,33 +1,26 @@
-lockable-equipment-locked = { $name } Р·Р°РєСЂС‹С‚
-lockable-equipment-unlocked = { $name } РѕС‚РєСЂС‹С‚
+lockable-equipment-locked = { $name } закрыт
+lockable-equipment-unlocked = { $name } открыт
 
-lockable-equipment-paired = { $key } РїСЂРёРІСЏР·Р°РЅ Рє { $device }
-lockable-equipment-wrong-key = { $key } РЅРµ РїРѕРґС…РѕРґРёС‚ Рє { $device }
+lockable-equipment-paired = { $key } привязан к { $device }
+lockable-equipment-wrong-key = { $key } не подходит к { $device }
 
-lockable-equipment-blocked = РЎР»РѕР№ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅ
-lockable-equipment-already = РЈСЃС‚СЂРѕР№СЃС‚РІРѕ СѓР¶Рµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ
-lockable-equipment-removed = { $name } СЃРЅСЏС‚
-lockable-equipment-equipped = { $name } РЅР°РґРµС‚
+lockable-equipment-blocked = Слой заблокирован
+lockable-equipment-already = Устройство уже установлено
+lockable-equipment-removed = { $name } снят
+lockable-equipment-equipped = { $name } надет
 
-lockable-equipment-self-action = РќРµР»СЊР·СЏ СЃРґРµР»Р°С‚СЊ СЌС‚Рѕ СЃР°РјРёРј
+lockable-equipment-self-action = Нельзя сделать это с собой
 
-lockable-equipment-cannot-be-forced-opened = { $name } РЅРµР»СЊР·СЏ РІСЃРєСЂС‹С‚СЊ СЃРёР»РѕР№
-lockable-equipment-is-broken = { $name } СЃР»РѕРјР°РЅ
-lockable-equipment-force-open = { $name } РІСЃРєСЂС‹С‚
-lockable-equipment-broken = { $name } СЃР»РѕРјР°РЅ
-lockable-equipment-repaired = { $name } РїРѕС‡РёРЅРµРЅ
-lockable-equipment-destroyed = { $name } СѓРЅРёС‡С‚РѕР¶РµРЅ
+lockable-equipment-cannot-be-forced-opened = { $name } нельзя вскрыть силой
+lockable-equipment-is-broken = { $name } сломан
+lockable-equipment-force-open = { $name } вскрыт
+lockable-equipment-broken = { $name } сломан
+lockable-equipment-repaired = { $name } починен
+lockable-equipment-destroyed = { $name } уничтожен
 
-lockable-equipment-verb-lock = Р—Р°РєСЂС‹С‚СЊ { $name }
-lockable-equipment-verb-unlock = РћС‚РєСЂС‹С‚СЊ { $name }
-lockable-equipment-verb-remove = РЎРЅСЏС‚СЊ { $name }
-lockable-equipment-verb-force-open = Р’СЃРєСЂС‹С‚СЊ { $name }
-lockable-equipment-verb-break = РЎР»РѕРјР°С‚СЊ { $name }
-lockable-equipment-verb-destroy = РЈРЅРёС‡С‚РѕР¶РёС‚СЊ { $name }
-
-lockable-equipment-verb-lock-generic = Р—Р°РєСЂС‹С‚СЊ
-lockable-equipment-verb-unlock-generic = РћС‚РєСЂС‹С‚СЊ
-lockable-equipment-verb-remove-generic = РЎРЅСЏС‚СЊ
-lockable-equipment-verb-force-open-generic = Р’СЃРєСЂС‹С‚СЊ
-lockable-equipment-verb-break-generic = РЎР»РѕРјР°С‚СЊ
-lockable-equipment-verb-destroy-generic = РЈРЅРёС‡С‚РѕР¶РёС‚СЊ
+lockable-equipment-verb-lock = Закрыть { $name }
+lockable-equipment-verb-unlock = Открыть { $name }
+lockable-equipment-verb-remove = Снять { $name }
+lockable-equipment-verb-force-open = Вскрыть { $name }
+lockable-equipment-verb-break = Сломать { $name }
+lockable-equipment-verb-destroy = Уничтожить { $name }

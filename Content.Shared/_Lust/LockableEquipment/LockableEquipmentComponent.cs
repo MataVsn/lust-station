@@ -9,6 +9,7 @@ namespace Content.Shared._Lust.LockableEquipment;
 /// Stores lock, break and visual configuration for a lockable device.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(LockableEquipmentSystem), typeof(EquipmentContainerSystem))]
 public sealed partial class LockableEquipmentComponent : Component
 {
     /// <summary>
