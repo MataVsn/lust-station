@@ -217,6 +217,8 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
         if (TryComp(args.Entity, out LockableEquipmentComponent? device))
             UpdateAppearance(ent.Owner, device);
+
+        RaiseLocalEvent(ent.Owner, new EquipmentContainerChangedEvent());
     }
 
     private void OnContainerRemoved(Entity<EquipmentContainerComponent> ent, ref EntRemovedFromContainerMessage args)
@@ -229,6 +231,8 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
         if (TryComp(args.Entity, out LockableEquipmentComponent? device))
             ResetAppearance(ent.Owner, device);
+
+        RaiseLocalEvent(ent.Owner, new EquipmentContainerChangedEvent());
     }
 
     private void OnUseHeldKeyVerb(Entity<EquipmentContainerComponent> ent, ref EquipmentContainerUseHeldKeyVerbEvent args)

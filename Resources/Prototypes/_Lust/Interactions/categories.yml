@@ -57,3 +57,7 @@
 - type: interactionCategory
   id: Legs
   name: lust-interaction-category-Legs
+
+- type: interactionCategory
+  id: Cage
+  name: lust-interaction-category-Cage
