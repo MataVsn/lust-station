@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._Sunrise.LockableEquipment;
+namespace Content.Shared._Lust.LockableEquipment;
 
 /// <summary>
 /// Component that defines what layers this entity blocks when worn/equipped,

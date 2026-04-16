@@ -1,7 +1,7 @@
-using Content.Shared._Sunrise.LockableEquipment;
+using Content.Shared._Lust.LockableEquipment;
 using Robust.Client.GameObjects;
 
-namespace Content.Client._Sunrise.LockableEquipment;
+namespace Content.Client._Lust.LockableEquipment;
 
 public sealed class LockableEquipmentVisualizerSystem : VisualizerSystem<LockableEquipmentComponent>
 {

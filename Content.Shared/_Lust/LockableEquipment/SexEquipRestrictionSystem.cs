@@ -1,4 +1,4 @@
-using Content.Shared._Sunrise.LockableEquipment;
+using Content.Shared._Lust.LockableEquipment;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;

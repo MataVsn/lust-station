@@ -1,11 +1,20 @@
-using Content.Shared._Sunrise.LockableEquipment;
+using Content.Shared._Lust.LockableEquipment;
 using Robust.Client.GameObjects;
 using Robust.Shared.Utility;
 
-namespace Content.Client._Sunrise.LockableEquipment;
+namespace Content.Client._Lust.LockableEquipment;
 
 public sealed class EquipmentVisualizerSystem : VisualizerSystem<EquipmentContainerComponent>
 {
+    private static readonly string[] LockableLayers =
+    {
+        "lockable_under",
+        "lockable_normal",
+        "lockable_over",
+        "lockable_chest",
+        "lockable_underpants",
+    };
+
     protected override void OnAppearanceChange(EntityUid uid, EquipmentContainerComponent comp, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
@@ -17,14 +26,14 @@ public sealed class EquipmentVisualizerSystem : VisualizerSystem<EquipmentContai
             visualData == null ||
             string.IsNullOrEmpty(visualData.Layer))
         {
-            // No data — hide all previously reserved equipment layers
-            // to avoid stale visuals from a prior device installation
-            foreach (var key in sprite.LayerMap.Keys)
+            // No data - hide all known lockable layers to avoid stale visuals
+            // from a prior device installation.
+            foreach (var key in LockableLayers)
             {
-                if (!key.StartsWith("lockable_"))
+                if (!SpriteSystem.LayerMapTryGet((uid, sprite), key, out var layer, false))
                     continue;
 
-                SpriteSystem.LayerSetVisible((uid, sprite), sprite.LayerMap[key], false);
+                SpriteSystem.LayerSetVisible((uid, sprite), layer, false);
             }
 
             return;
