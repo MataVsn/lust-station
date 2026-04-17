@@ -15,7 +15,9 @@
   components:
   - type: Sprite
     sprite: _Lust/Clothing/Cages/cage_normal.rsi
-    state: icon
+    layers:
+    - map: ["base"]
+      state: icon
   - type: LockableEquipment
     rsiPath: _Lust/Clothing/Cages/cage_normal.rsi
     spriteState: equipped-PANTS
@@ -33,7 +35,9 @@
   components:
   - type: Sprite
     sprite: _Lust/Clothing/Cages/cage_iron.rsi
-    state: icon
+    layers:
+    - map: ["base"]
+      state: icon
   - type: LockableEquipment
     rsiPath: _Lust/Clothing/Cages/cage_iron.rsi
     spriteState: equipped-PANTS
@@ -53,7 +57,9 @@
   components:
   - type: Sprite
     sprite: _Lust/Clothing/Cages/cage_flat.rsi
-    state: icon
+    layers:
+    - map: ["base"]
+      state: icon
   - type: LockableEquipment
     rsiPath: _Lust/Clothing/Cages/cage_flat.rsi
     spriteState: equipped-PANTS
@@ -72,7 +78,9 @@
   components:
   - type: Sprite
     sprite: _Lust/Clothing/Cages/cage_female.rsi
-    state: icon
+    layers:
+    - map: ["base"]
+      state: icon
   - type: LockableEquipment
     rsiPath: _Lust/Clothing/Cages/cage_female.rsi
     spriteState: equipped-PANTS
@@ -91,7 +99,9 @@
   components:
   - type: Sprite
     sprite: _Lust/Clothing/Cages/cage_electric.rsi
-    state: icon
+    layers:
+    - map: ["base"]
+      state: icon
   - type: LockableEquipment
     rsiPath: _Lust/Clothing/Cages/cage_electric.rsi
     spriteState: equipped-PANTS

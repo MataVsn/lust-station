@@ -1,11 +1,9 @@
-using Content.Shared._Lust.LockableEquipment;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Tag;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Containers;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._Lust.LockableEquipment;
@@ -15,11 +13,9 @@ public sealed class LockableEquipmentSystem : EntitySystem
     private const int UserResolveDepthLimit = 10;
 
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedStackSystem _stack = default!;
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly LayerAccessSystem _layerAccess = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -74,9 +70,6 @@ public sealed class LockableEquipmentSystem : EntitySystem
 
         if (!TryComp<LockableEquipmentComponent>(device, out var lockComp))
             return false;
-
-        if (!EnsureAccessible(device, user, lockComp))
-            return true;
 
         var keyName = MetaData(keyUid).EntityName;
         var name = MetaData(device).EntityName;
@@ -150,9 +143,6 @@ public sealed class LockableEquipmentSystem : EntitySystem
         if (!TryComp<LockableEquipmentComponent>(device, out var comp))
             return false;
 
-        if (!EnsureAccessible(device, user, comp))
-            return true;
-
         if (comp.Mode == LockableEquipmentComponent.BreakMode.None)
         {
             _popup.PopupClient(
@@ -174,8 +164,6 @@ public sealed class LockableEquipmentSystem : EntitySystem
                 user);
             return true;
         }
-
-        EnsureComp<DoAfterComponent>(user);
 
         var doAfter = new DoAfterArgs(
             EntityManager,
@@ -204,9 +192,6 @@ public sealed class LockableEquipmentSystem : EntitySystem
     {
         if (!TryComp<LockableEquipmentComponent>(device, out var comp))
             return false;
-
-        if (!EnsureAccessible(device, user, comp))
-            return true;
 
         if (!CanBreakWithTool(device, tool, comp))
             return false;
@@ -272,9 +257,6 @@ public sealed class LockableEquipmentSystem : EntitySystem
     {
         if (!TryComp<LockableEquipmentComponent>(device, out var comp))
             return false;
-
-        if (!EnsureAccessible(device, user, comp))
-            return true;
 
         if (!CanRepairWithMaterial(device, material, comp))
             return false;
@@ -358,30 +340,4 @@ public sealed class LockableEquipmentSystem : EntitySystem
         _appearance.SetData(ent.Owner, EquipmentVisuals.IconState, state, appearance);
     }
 
-    private bool EnsureAccessible(EntityUid device, EntityUid user, LockableEquipmentComponent comp)
-    {
-        var accessTarget = ResolveAccessTarget(device);
-        if (accessTarget == device)
-            return true;
-
-        if (_layerAccess.IsLayerAccessible(accessTarget, comp.Layer, comp))
-            return true;
-
-        _popup.PopupClient(
-            Loc.GetString("lockable-equipment-blocked"),
-            user);
-        return false;
-    }
-
-    private EntityUid ResolveAccessTarget(EntityUid device)
-    {
-        if (_container.TryGetContainingContainer(device, out var container) &&
-            TryComp(container.Owner, out EquipmentContainerComponent? equipmentContainer) &&
-            container.ID == equipmentContainer.ContainerId)
-        {
-            return container.Owner;
-        }
-
-        return device;
-    }
 }

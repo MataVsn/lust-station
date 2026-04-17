@@ -22,7 +22,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
     [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
     [Dependency] private readonly LockableEquipmentSystem _lockable = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly LayerAccessSystem _layerAccess = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -35,9 +35,6 @@ public sealed class EquipmentContainerSystem : EntitySystem
         SubscribeLocalEvent<EquipmentContainerComponent, EntInsertedIntoContainerMessage>(OnContainerInserted);
         SubscribeLocalEvent<EquipmentContainerComponent, EntRemovedFromContainerMessage>(OnContainerRemoved);
 
-        SubscribeLocalEvent<EquipmentContainerComponent, EquipmentContainerUseHeldKeyVerbEvent>(OnUseHeldKeyVerb);
-        SubscribeLocalEvent<EquipmentContainerComponent, EquipmentContainerBreakWithHeldToolVerbEvent>(OnBreakWithHeldToolVerb);
-        SubscribeLocalEvent<EquipmentContainerComponent, EquipmentContainerRemoveVerbEvent>(OnRemoveVerb);
     }
 
     private void OnInteractUsing(Entity<EquipmentContainerComponent> ent, ref InteractUsingEvent args)
@@ -59,18 +56,10 @@ public sealed class EquipmentContainerSystem : EntitySystem
             if (!TryComp(installedDevice.Value, out LockableEquipmentComponent? installedComp))
                 return;
 
-            if (TryInteractWithInstalledDevice(ent, installedDevice.Value, installedComp, args.User, args.Used, out var handled))
+            if (!IsLowerBodyBlocked(ent.Owner) &&
+                TryInteractWithInstalledDevice(ent, installedDevice.Value, installedComp, args.User, args.Used, out var handled))
             {
                 args.Handled = handled;
-                return;
-            }
-
-            if (!CanAccess(ent.Owner, installedComp.Layer, installedComp))
-            {
-                _popup.PopupClient(
-                    Loc.GetString("lockable-equipment-blocked"),
-                    args.User);
-                args.Handled = true;
                 return;
             }
         }
@@ -90,12 +79,13 @@ public sealed class EquipmentContainerSystem : EntitySystem
         if (TryGetEquipment(ent.Owner, ent.Comp) is not {} device)
             return;
 
+        if (IsLowerBodyBlocked(ent.Owner))
+            return;
+
         if (!TryComp(device, out LockableEquipmentComponent? comp))
             return;
 
-        if (!CanAccess(ent.Owner, comp.Layer, comp))
-            return;
-
+        var user = args.User;
         var name = MetaData(device).EntityName;
         var addedKeyVerb = false;
         var addedBreakVerb = false;
@@ -114,25 +104,22 @@ public sealed class EquipmentContainerSystem : EntitySystem
                     Text = comp.Locked
                         ? Loc.GetString("lockable-equipment-verb-unlock", ("name", name))
                         : Loc.GetString("lockable-equipment-verb-lock", ("name", name)),
-                    EventTarget = ent,
-                    ExecutionEventArgs = new EquipmentContainerUseHeldKeyVerbEvent(args.User)
+                    Act = () => TryUseHeldKey(ent, user)
                 });
             }
 
             if (!addedBreakVerb && comp.Locked && _lockable.CanBreakWithTool(device, held.Value, comp))
             {
                 var breakText = GetBreakVerbText(name, comp.Mode);
-                if (breakText == null)
-                    continue;
-
-                addedBreakVerb = true;
-
-                args.Verbs.Add(new InteractionVerb
+                if (breakText != null)
                 {
-                    Text = breakText,
-                    EventTarget = ent,
-                    ExecutionEventArgs = new EquipmentContainerBreakWithHeldToolVerbEvent(args.User)
-                });
+                    addedBreakVerb = true;
+                    args.Verbs.Add(new InteractionVerb
+                    {
+                        Text = breakText,
+                        Act = () => TryBreakWithHeldTool(ent, user)
+                    });
+                }
             }
         }
 
@@ -141,8 +128,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
             args.Verbs.Add(new InteractionVerb
             {
                 Text = Loc.GetString("lockable-equipment-verb-remove", ("name", name)),
-                EventTarget = ent,
-                ExecutionEventArgs = new EquipmentContainerRemoveVerbEvent(args.User)
+                Act = () => TryRemove(ent.Owner, user, ent.Comp)
             });
         }
     }
@@ -167,7 +153,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
                 if (FindDevice(container) != null)
                     return;
 
-                if (!CanAccess(ent.Owner, device.Layer, device))
+                if (IsCoveredByClothing(ent.Owner))
                     return;
 
                 if (!_container.Insert(used, container))
@@ -187,10 +173,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
                     break;
                 }
 
-                if (!TryComp(device.Value, out LockableEquipmentComponent? dev))
-                    return;
-
-                if (!CanRemove(ent.Owner, args.User, container, quiet: true))
+                if (!CanRemove(container, args.User, quiet: true))
                     return;
 
                 if (!_container.Remove(device.Value, container))
@@ -235,45 +218,19 @@ public sealed class EquipmentContainerSystem : EntitySystem
         RaiseLocalEvent(ent.Owner, new EquipmentContainerChangedEvent());
     }
 
-    private void OnUseHeldKeyVerb(Entity<EquipmentContainerComponent> ent, ref EquipmentContainerUseHeldKeyVerbEvent args)
-    {
-        if (!args.User.IsValid() || Deleted(args.User))
-            return;
-
-        TryUseHeldKey(ent, args.User);
-    }
-
-    private void OnBreakWithHeldToolVerb(Entity<EquipmentContainerComponent> ent, ref EquipmentContainerBreakWithHeldToolVerbEvent args)
-    {
-        if (!args.User.IsValid() || Deleted(args.User))
-            return;
-
-        TryBreakWithHeldTool(ent, args.User);
-    }
-
-    private void OnRemoveVerb(Entity<EquipmentContainerComponent> ent, ref EquipmentContainerRemoveVerbEvent args)
-    {
-        if (!args.User.IsValid() || Deleted(args.User))
-            return;
-
-        TryRemove(ent.Owner, args.User);
-    }
-
     /// <summary>
     /// Attempts to remove the currently installed device from the target.
     /// </summary>
-    public void TryRemove(EntityUid target, EntityUid user)
+    public void TryRemove(EntityUid target, EntityUid user, EquipmentContainerComponent? comp = null)
     {
         if (!user.IsValid() || Deleted(user))
             return;
 
-        if (!TryComp(target, out EquipmentContainerComponent? comp))
+        if (!Resolve(target, ref comp))
             return;
 
-        EnsureComp<DoAfterComponent>(user);
-
         var container = _container.EnsureContainer<ContainerSlot>(target, comp.ContainerId);
-        if (!CanRemove(target, user, container))
+        if (!CanRemove(container, user))
             return;
 
         var doAfter = new DoAfterArgs(
@@ -309,8 +266,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
         container ??= _container.EnsureContainer<ContainerSlot>(ent.Owner, ent.Comp.ContainerId);
 
-        var accessAllowed = CanAccess(ent.Owner, device.Layer, device);
-        if (!accessAllowed)
+        if (IsCoveredByClothing(ent.Owner))
         {
             _popup.PopupClient(
                 Loc.GetString("lockable-equipment-blocked"),
@@ -336,8 +292,6 @@ public sealed class EquipmentContainerSystem : EntitySystem
             return false;
         }
         // Lust-Edit-End
-
-        EnsureComp<DoAfterComponent>(user);
 
         var doAfter = new DoAfterArgs(
             EntityManager,
@@ -409,9 +363,30 @@ public sealed class EquipmentContainerSystem : EntitySystem
         return FindDevice(container);
     }
 
-    private bool CanAccess(EntityUid owner, string layer, LockableEquipmentComponent device)
+    private bool IsLowerBodyBlocked(EntityUid target)
     {
-        return _layerAccess.IsLayerAccessible(owner, layer, device);
+        return _inventory.TryGetSlotEntity(target, "jumpsuit", out _) ||
+               _inventory.TryGetSlotEntity(target, "outerClothing", out _);
+    }
+
+    private static readonly SlotFlags CoverFlags =
+        SlotFlags.OUTERCLOTHING | SlotFlags.INNERCLOTHING | SlotFlags.PANTS;
+
+    private bool IsCoveredByClothing(EntityUid target)
+    {
+        if (!TryComp(target, out InventoryComponent? inv))
+            return false;
+
+        foreach (var slot in inv.Slots)
+        {
+            if ((slot.SlotFlags & CoverFlags) == 0)
+                continue;
+
+            if (_inventory.TryGetSlotEntity(target, slot.Name, out _))
+                return true;
+        }
+
+        return false;
     }
 
     private bool TryUseHeldKey(Entity<EquipmentContainerComponent> ent, EntityUid user)
@@ -546,7 +521,7 @@ public sealed class EquipmentContainerSystem : EntitySystem
             user);
     }
 
-    private bool CanRemove(EntityUid target, EntityUid user, BaseContainer container, bool quiet = false)
+    private bool CanRemove(BaseContainer container, EntityUid user, bool quiet = false)
     {
         var device = FindDevice(container);
         if (device == null)
@@ -554,18 +529,6 @@ public sealed class EquipmentContainerSystem : EntitySystem
 
         if (!TryComp(device.Value, out LockableEquipmentComponent? dev))
             return false;
-
-        if (!CanAccess(target, dev.Layer, dev))
-        {
-            if (!quiet)
-            {
-                _popup.PopupClient(
-                    Loc.GetString("lockable-equipment-blocked"),
-                    user);
-            }
-
-            return false;
-        }
 
         if (dev.Locked)
         {

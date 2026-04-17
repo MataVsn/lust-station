@@ -4,8 +4,11 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._Lust.LockableEquipment;
 
-public sealed class EquipmentVisualizerSystem : VisualizerSystem<EquipmentContainerComponent>
+public sealed class EquipmentVisualizerSystem : EntitySystem
 {
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
     private static readonly string[] LockableLayers =
     {
         "lockable_under",
@@ -15,42 +18,45 @@ public sealed class EquipmentVisualizerSystem : VisualizerSystem<EquipmentContai
         "lockable_underpants",
     };
 
-    protected override void OnAppearanceChange(EntityUid uid, EquipmentContainerComponent comp, ref AppearanceChangeEvent args)
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<EquipmentContainerComponent, AppearanceChangeEvent>(OnAppearanceChange);
+    }
+
+    private void OnAppearanceChange(EntityUid uid, EquipmentContainerComponent comp, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
             return;
 
         var sprite = args.Sprite;
 
-        if (!AppearanceSystem.TryGetData<EquipmentVisualData>(uid, EquipmentVisuals.VisualData, out var visualData, args.Component) ||
+        if (!_appearance.TryGetData<EquipmentVisualData>(uid, EquipmentVisuals.VisualData, out var visualData, args.Component) ||
             visualData == null ||
             string.IsNullOrEmpty(visualData.Layer))
         {
-            // No data - hide all known lockable layers to avoid stale visuals
-            // from a prior device installation.
             foreach (var key in LockableLayers)
             {
-                if (!SpriteSystem.LayerMapTryGet((uid, sprite), key, out var layer, false))
+                if (!_sprite.LayerMapTryGet((uid, sprite), key, out var idx, false))
                     continue;
 
-                SpriteSystem.LayerSetVisible((uid, sprite), layer, false);
+                _sprite.LayerSetVisible((uid, sprite), idx, false);
             }
 
             return;
         }
 
-        var layerIdx = SpriteSystem.LayerMapReserve((uid, sprite), visualData.Layer);
+        var layerIdx = _sprite.LayerMapReserve((uid, sprite), visualData.Layer);
 
         if (!visualData.Visible ||
             string.IsNullOrEmpty(visualData.RsiPath) ||
             string.IsNullOrEmpty(visualData.State))
         {
-            SpriteSystem.LayerSetVisible((uid, sprite), layerIdx, false);
+            _sprite.LayerSetVisible((uid, sprite), layerIdx, false);
             return;
         }
 
-        SpriteSystem.LayerSetRsi((uid, sprite), layerIdx, new ResPath(visualData.RsiPath));
-        SpriteSystem.LayerSetRsiState((uid, sprite), layerIdx, visualData.State);
-        SpriteSystem.LayerSetVisible((uid, sprite), layerIdx, true);
+        _sprite.LayerSetRsi((uid, sprite), layerIdx, new ResPath(visualData.RsiPath));
+        _sprite.LayerSetRsiState((uid, sprite), layerIdx, visualData.State);
+        _sprite.LayerSetVisible((uid, sprite), layerIdx, true);
     }
 }
