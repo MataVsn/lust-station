@@ -73,12 +73,6 @@ public sealed partial class LockableEquipmentComponent : Component
     public int RepairAmount = 1;
     
     /// <summary>
-    /// Access priority used when comparing against blocking layers.
-    /// </summary>
-    [DataField]
-    public int AccessPriority = 1;
-    
-    /// <summary>
     /// RSI state used for the installed device overlay.
     /// </summary>
     [DataField]

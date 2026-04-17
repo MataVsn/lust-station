@@ -17,13 +17,6 @@ public sealed partial class ElectricLockableEquipmentComponent : Component
     public string ActivatedIconState = "icon_activated";
 
     /// <summary>
-    /// Optional RSI state shown on the wearer overlay while the device is actively shocking.
-    /// If null, the equipped overlay stays on its normal sprite state.
-    /// </summary>
-    [DataField]
-    public string? ActivatedEquippedState;
-
-    /// <summary>
     /// How long the activated icon state stays visible after a trigger.
     /// </summary>
     [DataField]

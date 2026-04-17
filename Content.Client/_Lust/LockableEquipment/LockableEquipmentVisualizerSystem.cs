@@ -3,9 +3,17 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client._Lust.LockableEquipment;
 
-public sealed class LockableEquipmentVisualizerSystem : VisualizerSystem<LockableEquipmentComponent>
+public sealed class LockableEquipmentVisualizerSystem : EntitySystem
 {
-    protected override void OnAppearanceChange(EntityUid uid, LockableEquipmentComponent comp, ref AppearanceChangeEvent args)
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<LockableEquipmentComponent, AppearanceChangeEvent>(OnAppearanceChange);
+    }
+
+    private void OnAppearanceChange(EntityUid uid, LockableEquipmentComponent comp, ref AppearanceChangeEvent args)
     {
         if (args.Sprite == null)
             return;
@@ -13,12 +21,12 @@ public sealed class LockableEquipmentVisualizerSystem : VisualizerSystem<Lockabl
         if (!args.Sprite.LayerMapTryGet("base", out var layer))
             return;
 
-        if (!AppearanceSystem.TryGetData<string>(uid, EquipmentVisuals.IconState, out var iconState, args.Component) ||
+        if (!_appearance.TryGetData<string>(uid, EquipmentVisuals.IconState, out var iconState, args.Component) ||
             string.IsNullOrEmpty(iconState))
         {
             return;
         }
 
-        SpriteSystem.LayerSetRsiState((uid, args.Sprite), layer, iconState);
+        _sprite.LayerSetRsiState((uid, args.Sprite), layer, iconState);
     }
 }
